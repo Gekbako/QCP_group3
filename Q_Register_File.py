@@ -138,7 +138,7 @@ class Q_Register:
         else:
             Control = index[0]
             Target = index[1]
-            Identity = SparseMatrix(2, [[0,0,1],[1,1,1]])
+            Identity = SparseMatrix(2, [[0, 0, 1], [1, 1, 1]])
             if Control == 0:
                 SwapMatrixControl = DenseMatrix(np.eye(2**QubitNum)).Sparse()
             else:
@@ -146,7 +146,8 @@ class Q_Register:
             if Target == 1:
                 SwapMatrixTarget = DenseMatrix(np.eye(2**QubitNum)).Sparse()
             else:
-                SwapMatrixTarget = TensorProduct([Identity,SwapMatrix1a(QubitNum-1, Target-1)]).sparseTensorProduct()
+                SwapMatrixTarget = TensorProduct(
+                    [Identity, SwapMatrix1a(QubitNum-1, Target-1)]).sparseTensorProduct()
             SwapMatrixForward = SwapMatrixTarget.Multiply(SwapMatrixControl)
             SwapMatrixBackward = SwapMatrixControl.Multiply(SwapMatrixTarget)
 
@@ -161,7 +162,7 @@ class Q_Register:
                 NewState = SwapMatrixBackward.SparseApply(NewState2)
                 self.state = NewState
                 return NewState
-            
+
             elif gate.matrixType == "Dense":
                 DenseSwapForward = DenseMatrix(SwapMatrixForward.Dense())
                 DenseSwapBackward = DenseMatrix(SwapMatrixBackward.Dense())
@@ -176,13 +177,9 @@ class Q_Register:
                 NewState = DenseSwapBackward.DenseApply(NewState2)
                 self.state = NewState
                 return NewState
-            
+
             else:  # Lazy ?????
                 pass
-
-
-
-
 
     def measure(self):
         """
@@ -191,11 +188,13 @@ class Q_Register:
         that is binary representation of a number between 0 and (2**n)-1       
         """
 
-        P = np.array([abs[qb]**2 for qb in self.state])
-        result = np.random.choice(np.arange(len(self.state)), weights=P)[0]
-        collapsed = format(result, "0"+str(len(self.state))+"b")
-        for i in range(len(collapsed)):
-            self.state[i] = collapsed[i]
+        P = np.array([abs(qb)**2 for qb in self.state])
+        print(P)
+        result = np.random.choice(np.arange(len(self.state)), p=P)
+        print(result)
+
+        self.state = self.state*0
+        self.state[result] = 1
 
     def __str__(self) -> str:
         # prints the Q_Register as 1D array
@@ -206,16 +205,16 @@ class Q_Register:
         return out.replace("][", "] [")
 
 
-a = np.array([1+1j, 2+2j], dtype=complex)
+"""a = np.array([1+1j, 2+2j], dtype=complex)
 b = np.array([3+3j, 4+4j], dtype=complex)
-q = Q_Register(3, np.array([1+0j, 0j, 0j, 1+0j, 1+0j, 0j]))
-
+q = Q_Register(3, 1/np.sqrt(2)*np.array([1+0j, 1+0j, 1+0j, 1+0j, 1+0j, 1+0j]))
+print(q)
 
 print(q.state)
-
+q.measure()
+print(q.state)
 
 HGate = Gate("Dense", "cNot")
-q.apply_gate(HGate, [2,1])
+q.apply_gate(HGate, [2, 1])
 
-print(q.state)
-
+print(q.state)"""
