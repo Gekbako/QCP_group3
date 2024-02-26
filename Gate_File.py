@@ -68,13 +68,22 @@ class Gate(object):
             return DenseMatrix(gate)
         if self.matrixType == "Sparse":
             return DenseMatrix(gate).Sparse()
+        
+        def __str__(self):
+            
+            return str(self.GateMatrix)
+        
 
-Swap = SwapMatrix1a(3,1)
-Swap2 = TensorProduct([SparseMatrix(2,[[0,0,1],[1,1,1]]),SwapMatrix1a(2,1)]).sparseTensorProduct()
-SwapTogether = Swap2.Multiply(Swap)
-u = np.array([0,0,0,1,0,0,0,0])
-v = Swap.SparseApply(u)
-Final = Swap2.SparseApply(v)
-Final2 = SwapTogether.SparseApply(u)
-print(Final)
-print(Final2)
+if __name__ == "__main__":
+    Swap = SwapMatrix1a(3,1)
+    Swap2 = TensorProduct([SparseMatrix(2,[[0,0,1],[1,1,1]]),SwapMatrix1a(2,1)]).sparseTensorProduct()
+    SwapTogether = Swap2.Multiply(Swap)
+    u = np.array([0,0,0,1,0,0,0,0])
+    v = Swap.SparseApply(u)
+    Final = Swap2.SparseApply(v)
+    Final2 = SwapTogether.SparseApply(u)
+    print(Final)
+    print(Final2)
+    testGate = Gate("Dense", "custom", customInput = np.array([[1,1], [2,3]]))
+    print()
+    print(testGate.GateMatrix)
