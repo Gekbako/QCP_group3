@@ -184,37 +184,32 @@ class Q_Register:
     def measure(self):
         """
         Measurement of the possibly entagled state of Q_Register,
-        according to the amplitudes, leaving the register in a state
-        that is binary representation of a number between 0 and (2**n)-1       
+        according to the amplitudes, leaving the register in a basis state 
+        between 0 and (2**n)-1       
         """
-
+        # callculate prob. amplituded
         P = np.array([abs(qb)**2 for qb in self.state])
-        print(P)
+        # get a basis state bases on the prob. amplitudes
         result = np.random.choice(np.arange(len(self.state)), p=P)
-        print(result)
 
         self.state = self.state*0
         self.state[result] = 1
 
     def __str__(self) -> str:
-        # prints the Q_Register as 1D array
-        out = f""
-        for x in self.qubits:
-            out += f"{x.state}"
+        # prints state of the register
 
-        return out.replace("][", "] [")
+        return str(self.state)
 
 
-"""a = np.array([1+1j, 2+2j], dtype=complex)
+a = np.array([1+1j, 2+2j], dtype=complex)
 b = np.array([3+3j, 4+4j], dtype=complex)
 q = Q_Register(3, 1/np.sqrt(2)*np.array([1+0j, 1+0j, 1+0j, 1+0j, 1+0j, 1+0j]))
-print(q)
 
-print(q.state)
+print(q)
 q.measure()
-print(q.state)
+print(q)
 
 HGate = Gate("Dense", "cNot")
 q.apply_gate(HGate, [2, 1])
 
-print(q.state)"""
+print(q)
