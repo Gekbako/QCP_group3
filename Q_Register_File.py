@@ -129,7 +129,7 @@ class Q_Register:
                     TensorList[num] = gate.GateMatrix
                 TensorGate = TensorProduct(TensorList).denseTensorProduct()
 
-                NewState = TensorGate.DenseApply(State)
+                NewState = TensorGate.DenseApply(State.inputArray)
                 self.state = NewState
                 return NewState
 
@@ -207,7 +207,7 @@ class Q_Register:
 
 """a = np.array([1+1j, 2+2j], dtype=complex)
 b = np.array([3+3j, 4+4j], dtype=complex)
-q = Q_Register(3, 1/np.sqrt(2)*np.array([1+0j, 1+0j, 1+0j, 1+0j, 1+0j, 1+0j]))
+q = Q_Register(3)
 print(q)
 
 print(q.state)
