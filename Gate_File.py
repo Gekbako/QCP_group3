@@ -74,12 +74,13 @@ class Gate(object):
             return DenseMatrix(gate).Sparse()
 
 
-"""Swap = SwapMatrix1a(3,1)
-Swap2 = TensorProduct([SparseMatrix(2,[[0,0,1],[1,1,1]]),SwapMatrix1a(2,1)]).sparseTensorProduct()
+Swap = SwapMatrix1a(3, 1)
+Swap2 = TensorProduct([SparseMatrix(2, [[0, 0, 1], [1, 1, 1]]),
+                      SwapMatrix1a(2, 1)]).sparseTensorProduct()
 SwapTogether = Swap2.Multiply(Swap)
-u = np.array([0,0,0,1,0,0,0,0])
+u = np.array([0, 0, 0, 1, 0, 0, 0, 0])
 v = Swap.SparseApply(u)
 Final = Swap2.SparseApply(v)
 Final2 = SwapTogether.SparseApply(u)
 print(Final)
-print(Final2)"""
+print(Final2)
