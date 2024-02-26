@@ -102,11 +102,19 @@ class DenseMatrix():
                     elements.append(elem)
         return (SparseMatrix(n, elements))
 
+    def __getitem__(self, index):
+        row, col = index
+        return self.inputArray[row, col]
+    
+    def __setitem__(self, index, value):
+        row, col = index
+        self.inputArray[row, col] = value
+        
     def __str__(self):
         return str(np.asmatrix(self.inputArray))
 
 
-"""
+
 if __name__ == "__main__":
     a = np.array([[3, 0, 1], [1, 0, 0], [0, 0, 6]])
     b = 2
@@ -124,4 +132,7 @@ if __name__ == "__main__":
     print(product)
     print(apply)
     print(matrixC.Sparse())
-"""
+    print(matrixC)
+    print(matrixC[1, 0])
+    matrixC[1,0] = 5
+    print(matrixC[1, 0])
