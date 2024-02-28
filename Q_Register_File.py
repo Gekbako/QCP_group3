@@ -164,8 +164,10 @@ class Q_Register:
         # get a basis state bases on the prob. amplitudes
         result = np.random.choice(np.arange(len(self.state)), p=P)
 
-        self.state.inputArray = self.state.inputArray*0
-        self.state.inputArray[result] = 1
+        self.state = self.state*0
+        self.state[result] = 1
+        
+        return result
 
     def __str__(self) -> str:
         # prints state of the register
