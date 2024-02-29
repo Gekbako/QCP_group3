@@ -102,9 +102,12 @@ class Q_Register:
                 for num in index:
                     TensorList[num] = gate.GateMatrix
                 TensorGate = TensorProduct(TensorList).denseTensorProduct()
-                NewState = TensorGate.DenseApply(State)
+
+                NewState = TensorGate.DenseApply(State.inputArray)
+                NewState = DenseMatrix(NewState)
                 self.state = NewState
-                return NewState
+                return NewState 
+
             else:  # Lazy ?????
                 pass
         else:
@@ -143,7 +146,7 @@ class Q_Register:
                 NewState1 = DenseSwapForward.DenseApply(State)
                 NewState2 = TensorGate.DenseApply(NewState1)
                 NewState = DenseSwapBackward.DenseApply(NewState2)
-                self.state = NewState
+                self.state = DenseMatrix(NewState)
                 return NewState
             else:  # Lazy ?????
                 pass
@@ -161,6 +164,8 @@ class Q_Register:
 
         self.state = self.state*0
         self.state[result] = 1
+        
+        return result
 
     def __str__(self) -> str:
         # prints state of the register
