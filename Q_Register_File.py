@@ -106,7 +106,7 @@ class Q_Register:
                 NewState = TensorGate.DenseApply(State.inputArray)
                 NewState = DenseMatrix(NewState)
                 self.state = NewState
-                return NewState 
+                return NewState
 
             else:  # Lazy ?????
                 pass
@@ -164,7 +164,7 @@ class Q_Register:
 
         self.state = self.state*0
         self.state[result] = 1
-        
+
         return result
 
     def __str__(self) -> str:
@@ -176,24 +176,35 @@ class Q_Register:
 a = np.array([1+1j, 2+2j], dtype=complex)
 b = np.array([3+3j, 4+4j], dtype=complex)
 # , 1/np.sqrt(2)*np.array([1+0j, 1+0j, 1+0j, 1+0j, 1+0j, 1+0j]))
-q = Q_Register(2)
+q = Q_Register(7)
 
 """
 print(q)
 q.measure()
 print(q)
-"""
+
 HGate = Gate("Sparse", "spinX")
 q.apply_gate(HGate, [0])
 
 densityMat = np.outer(q.state, q.state)
-#print(densityMat)
+# print(densityMat)
 
-test1 = DenseMatrix(np.outer(np.array([1,0]),np.array([1,0])))
-test2 = DenseMatrix(np.outer(np.array([0,1]),np.array([0,1])))
+test1 = DenseMatrix(np.outer(np.array([1, 0]), np.array([1, 0])))
+test2 = DenseMatrix(np.outer(np.array([0, 1]), np.array([0, 1])))
+
 test = [test1, test2]
 Id = DenseMatrix(np.eye(2))
-TProd = TensorProduct([Id,test1]).denseTensorProduct()
+TProd = TensorProduct([Id, test1]).denseTensorProduct()
+"""
+base_states = []
+base_states_matrices = []
+for i in range(8):
+    temp = np.zeros(8, dtype=complex)
+    temp[i] = 1
+    base_states.append(temp)
+    base_states_matrices.append(np.outer(temp, temp))
+print(base_states, base_states_matrices, sep="\n")
 
-TestFinal = TProd.inputArray*densityMat*TProd.inputArray
-print(TestFinal)
+
+"""TestFinal = TProd.inputArray*densityMat*TProd.inputArray
+print(TestFinal)"""
