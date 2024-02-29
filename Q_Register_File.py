@@ -176,13 +176,24 @@ class Q_Register:
 a = np.array([1+1j, 2+2j], dtype=complex)
 b = np.array([3+3j, 4+4j], dtype=complex)
 # , 1/np.sqrt(2)*np.array([1+0j, 1+0j, 1+0j, 1+0j, 1+0j, 1+0j]))
-q = Q_Register(3)
+q = Q_Register(2)
 
+"""
 print(q)
 q.measure()
 print(q)
-
+"""
 HGate = Gate("Sparse", "spinX")
-q.apply_gate(HGate, [1])
+q.apply_gate(HGate, [0])
 
-print(q)
+densityMat = np.outer(q.state, q.state)
+#print(densityMat)
+
+test1 = DenseMatrix(np.outer(np.array([1,0]),np.array([1,0])))
+test2 = DenseMatrix(np.outer(np.array([0,1]),np.array([0,1])))
+test = [test1, test2]
+Id = DenseMatrix(np.eye(2))
+TProd = TensorProduct([Id,test1]).denseTensorProduct()
+
+TestFinal = TProd.inputArray*densityMat*TProd.inputArray
+print(TestFinal)
