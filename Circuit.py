@@ -37,6 +37,8 @@ class Circuit(object):
         self.GateArray = [ []*n for n in range(numberOfQubits)] # array to keep track of applied gates for visualisation
         self.MatrixType = matrixType
 
+        self.TensorArray = np.zeros(numberOfQubits, dtype = Gate)
+
 
         if matrixType == "dense":
             self.CircuitChain = DenseMatrix(np.identity(self.Dimension))
@@ -52,101 +54,72 @@ class Circuit(object):
         
                                   
 
-    def addGate(self, gateTuple):
-        '''
-        This function should line up a gate to be applied to a certain qubit at a certain point in the chain. 
-        It should also: 
-            - Somehow be applied to the correct qubit
-                --> I.e. it should be tensored at the correct place. 
-            - Somehow be optimised wrt memory and not just be naively tensored with Identities in the other vector spaces
-                --> That is, it should - assuming we are applying other gates to other qubits at the same point in the 
-                        chain - be tensored to those other gates to save computation. 
-
-       For now assuming gateTuple on form [(gate, qubit acting on), (gate, qubit acting on), ...].                 
-
-        '''
-
-
-
-                # This below gets us into trouble in the TensorProduct...
-        compositeGate = Gate(self.MatrixType, "custom", np.array([1]))                # Naive implementation:
-                                            # this way assumes you add all gates that go at a certain point, at the same time
-        # this way also assumes we are talking single qubit gates... Two qubit gates are a hassle. 
-
-        # Two qubit gate implementation is going to depened heavily on how they are implemented in the Gate class, so wait
-
-        qubitNumber = np.array(gateTuple)[:, 1]
-        
-        
-        # initialise an Idenity gate to tensor the gates with to account for unaffected qubits. 
-        # Initialise it outside for loop to avoid computational loading. '
-        IdentityGate = Gate(self.MatrixType, "identity")
-
-        for n in range(self.NumberOfQubits):
-            
-            if n in qubitNumber: 
-                index = np.where(qubitNumber == str(n))[0][0]  # this ugly as hell
-                 
-                # tensor together the compositeGate and the gate to be added 
-                # OBS: if densematrix, the tensor product now takes just the arrays and return just the arrays
-                #        the way to extract the arrays from Gate is not quite implemented yet
-
-                nthGate = Gate(self.MatrixType, gateTuple[n][0])
-                compositeGate = TensorProduct([compositeGate.GateMatrix.inputArray, 
-                                                    nthGate.GateMatrix.inputArray]).denseTensorProduct()
-                                        # add some way to determine whether denseTP or sparseTP
-                compositeGate = Gate(self.MatrixType, "custom", compositeGate.inputArray)
-
-                self.GateArray[index].append(gateTuple[n][0])
-
-                continue
-            
-            print(type(compositeGate.GateMatrix))
-            print(type(IdentityGate.GateMatrix))
-            #tensor together the compositeGate and Identity gate 
-            compositeGate = TensorProduct([compositeGate.GateMatrix.inputArray, 
-                                                IdentityGate.GateMatrix.inputArray]).denseTensorProduct()
-            compositeGate = Gate(self.MatrixType, "custom", compositeGate.inputArray) # this might prove problematic since 
-                                    # the Gate class creates a Sparse Gate through conversion from Dense, meaning if we 
-                                    # end up with a huge tensored compositeGate, the whole thing will need to be put on 
-                                    # Dense form before being Sparse'd for efficiency...
-
-        self.CircuitChain.Multiply(compositeGate.GateMatrix)
-        self.visualiseCircuit()
-        
-
-    ###########################################################################################
-        # Alternative way to add gates to circuit:
-
     def AddGate(self, gate : str, qubit):
         '''
-        Function to add Gate to Circuit by use of Apply method from Q_Register. 
-        Also keeps track of which gates have been added to circuit for visualisation.   
+        Function to add Gate to Circuit without use of apply method from Q_Register. CNOT and CV are applied 
+        directly to the register by use of the apply_gate from Q_Register. 
+        Also keeps track of which gates have been added to circuit for visualisation. 
         '''
+
         addedGate = Gate(self.MatrixType, gate)
-        self.Register = self.Register.apply_gate(addedGate, qubit)
+
+
         if gate == "cNot" or gate == "cV":
+            # check special case of 2-qubit gates, these are applied straight to register due to need for Swap-matrices.
+            self.Register = self.Register.apply_gate(addedGate, qubit)
+            
             self.GateArray[qubit[0]].insert(0, gate + "-control")
             self.GateArray[qubit[1]].insert(0, gate + "-target")
 
-        else: self.GateArray[qubit].insert(0, gate)
+        else: 
+            if isinstance(qubit, int):
+                self.TensorArray[qubit] = addedGate
+                self.GateArray[qubit].insert(0, gate)
+            else:
+                for Qbit in qubit:
+
+                    self.TensorArray[Qbit] = addedGate
+                    self.GateArray[Qbit].insert(0, gate)
 
 
 
-    def Construct(self):
+    def AddLayer(self):
         '''
         Function to apply the tensor product gate constructed by a series of AddGate to quantum register. 
         '''
         
+        identityGate = Gate(self.MatrixType, "identity")
+
+        self.TensorArray = np.where(self.TensorArray == 0, identityGate, self.TensorArray) 
+        # Now all elements are Gates, TensorProduct needs Dense-/Sparse matrices
         
-        pass
+        # if self.MatrixType == "Sparse":
+        #     tensorArray = np.zeros(self.NumberOfQubits, dtype = SparseMatrix)
+        # elif self.MatrixType == "Dense":
+        #     tensorArray = np.zeros(self.NumberOfQubits, dtype = DenseMatrix)
+
+        tensorArray = []
+
+        for i in range(self.NumberOfQubits):
+            # tensorArray[i] = self.TensorArray[i].GateMatrix
+            tensorArray.insert(0, (self.TensorArray[i].GateMatrix))
+        
+        if self.MatrixType == "Sparse":
+            tensor = TensorProduct(tensorArray).sparseTensorProduct()
+            nuReg = tensor.SparseApply(self.Register.state)
+            self.Register.state = nuReg
+
+        elif self.MatrixType == "Dense":
+            tensor = TensorProduct(tensorArray).denseTensorProduct()
+            nuReg = tensor.DenseApply(self.Register.state.inputArray)
+            self.Register.state = DenseMatrix(nuReg)
 
 
 
-    ###########################################################################################
-        # WAIT! THE QU REGISTER HAS THE APPLY METHOD DEFINED...USE THIS
-
-    ###########################################################################################
+        
+        self.TensorArray = np.zeros(self.NumberOfQubits, dtype = Gate) # Clear TensorArray to be ready for new layer
+        self.visualiseCircuit()
+        
 
 
     def visualiseCircuit(self):
@@ -156,11 +129,21 @@ class Circuit(object):
         No idea how to implement.
         Function should be run each time a gate is added to show the updated circuit? 
         '''
-        pass
+        
+        for i in range(len(self.GateArray)):
+            gateString = f"|0>_{len(self.GateArray) - 1 - i} --"
+            for element in self.GateArray[len(self.GateArray) - 1 - i]:
+                gateString += f"-- {element} --"
+            print(f"{gateString}-- END\n")
+
 
     def runCircuit(self):
         '''
         Function to run the circuit. Returns either endstate or result of measurement? Or both? 
         '''
-        pass
+        assert self.TensorArray.any() == 0, "There are still gates that haven't been applied. \nUse AddLayer() to apply them, then proceed."
+
+        measurements = self.Register.measure() 
+        
+        return measurements
 
