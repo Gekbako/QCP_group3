@@ -1,7 +1,9 @@
 import numpy as np
 
-from Gate_File import Gate
+from Gate_File import *
 from Q_Register_File import *
+from BitwiseApply import BitwiseGate
+
 
 class Circuit(object):
     '''
@@ -43,7 +45,7 @@ class Circuit(object):
         if matrixType == "dense":
             self.CircuitChain = DenseMatrix(np.identity(self.Dimension))
         elif matrixType == "sparse":
-            self.CircuitChain = SparseMatrix(np.identity(self.Dimension)) 
+            self.CircuitChain = DenseMatrix(np.identity(self.Dimension)).Sparse()
         elif matrixType == "lazy":
             #???
             pass
@@ -68,27 +70,28 @@ class Circuit(object):
             # check special case of 2-qubit gates, these are applied straight to register due to need for Swap-matrices.
             self.Register = self.Register.apply_gate(addedGate, qubit)
             
-            self.GateArray[qubit[0]].insert(0, gate + "-control")
-            self.GateArray[qubit[1]].insert(0, gate + "-target")
+            self.GateArray[qubit[0]].append(gate + "-control")
+            self.GateArray[qubit[1]].append(gate + "-target")
 
         else: 
             if isinstance(qubit, int):
                 self.TensorArray[qubit] = addedGate
-                self.GateArray[qubit].insert(0, gate)
+                self.GateArray[qubit].append(gate)
             else:
                 for Qbit in qubit:
 
                     self.TensorArray[Qbit] = addedGate
-                    self.GateArray[Qbit].insert(0, gate)
+                    self.GateArray[Qbit].append(gate)
 
 
 
     def AddLayer(self):
         '''
         Function to apply the tensor product gate constructed by a series of AddGate to quantum register. 
+        Also saves the tensor it applies as self.SavedTensor, to allow for use outside of program.
         '''
         
-        identityGate = Gate(self.MatrixType, "identity")
+        identityGate = Gate(self.MatrixType, "custom", np.array([[1, 0], [0, 1]]))
 
         self.TensorArray = np.where(self.TensorArray == 0, identityGate, self.TensorArray) 
         # Now all elements are Gates, TensorProduct needs Dense-/Sparse matrices
@@ -98,27 +101,29 @@ class Circuit(object):
         # elif self.MatrixType == "Dense":
         #     tensorArray = np.zeros(self.NumberOfQubits, dtype = DenseMatrix)
 
-        tensorArray = []
+        tensorList = []
 
         for i in range(self.NumberOfQubits):
             # tensorArray[i] = self.TensorArray[i].GateMatrix
-            tensorArray.insert(0, (self.TensorArray[i].GateMatrix))
+            tensorList.insert(0, (self.TensorArray[i].GateMatrix))
         
         if self.MatrixType == "Sparse":
-            tensor = TensorProduct(tensorArray).sparseTensorProduct()
+            tensor = TensorProduct(tensorList).sparseTensorProduct()
             nuReg = tensor.SparseApply(self.Register.state)
             self.Register.state = nuReg
+            self.SavedTensor = tensor
+
 
         elif self.MatrixType == "Dense":
-            tensor = TensorProduct(tensorArray).denseTensorProduct()
-            nuReg = tensor.DenseApply(self.Register.state.inputArray)
-            self.Register.state = DenseMatrix(nuReg)
-
+            tensor = TensorProduct(tensorList).denseTensorProduct()
+            nuReg = tensor.DenseApply(self.Register.state)
+            self.Register.state = nuReg
+            self.SavedTensor = tensor
 
 
         
         self.TensorArray = np.zeros(self.NumberOfQubits, dtype = Gate) # Clear TensorArray to be ready for new layer
-        self.visualiseCircuit()
+        # self.visualiseCircuit()
         
 
 
@@ -144,6 +149,10 @@ class Circuit(object):
         assert self.TensorArray.any() == 0, "There are still gates that haven't been applied. \nUse AddLayer() to apply them, then proceed."
 
         measurements = self.Register.measure() 
-        
+
         return measurements
+
+
+
+
 
