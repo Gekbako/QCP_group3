@@ -8,20 +8,20 @@ from Tensor import TensorProduct
 
 
 # initialize a 2 qbit register 
-register1 = Q_Register(1)
+register1 = Q_Register(3)
+gate1 = Gate("Sparse", "cNot") 
+gate2 = Gate("Sparse", "spinX")
+gate3 = Gate("Sparse", "spinZ")
 
-print(f"Initial qubits are {register1.state}.")
 
-# create a hadamard gate to act on register1
-gate1 = Gate("Dense", "hadamard") 
+# # apply the gates to register1
+register1.apply_gate(gate2, [1])
 
-# # apply the hadamard gate to register1
-register1.apply_gate(gate1,[0]) 
-print(f"Qubits after the gate are {register1.state}.")
+print(f"Qubits after the gates are {register1.state}.")
 
-register1.apply_gate(gate1,[0]) 
-print(f"Qubits after the second gate are {register1.state}.")
+matrix = DenseMatrix(np.outer(register1.state,register1.state))
+matrix2 = TensorProduct([DenseMatrix(np.eye(4)),DenseMatrix(np.outer([0,1],[0,1]))]).denseTensorProduct()
 
-# measure the register
-register1.measure()
-print(f"Collapsed qubits are {register1.state}.") 
+print(matrix2.Multiply(matrix))
+all_zeros = not np.any(matrix2.Multiply(matrix).inputArray)
+print(all_zeros)

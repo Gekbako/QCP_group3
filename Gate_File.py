@@ -64,7 +64,7 @@ class Gate(object):
         elif self.gateName == "spinY":
             gate = np.array([[0, -1j], [1j, 0]])
         elif self.gateName == "spinZ":
-            gate = np.array([[1, 1], [0, -1]])
+            gate = np.array([[1, 0], [0, -1]])
         elif self.gateName == "custom":
             gate = self.customInput
 

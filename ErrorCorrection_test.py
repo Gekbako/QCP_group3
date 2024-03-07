@@ -54,34 +54,36 @@ def trace_single(matrix):
         return 0
     else:
         return matrix[0, 0] + matrix[1][1]
+    
+def normalize(vector):
+    norm = np.linalg.norm(vector)
+    if norm == 0: 
+       return vector
+    return vector / norm
 
-
-"""
- Register = Q_Register(2)
-Gate_test = Gate("Sparse", "spinX")
-
-Register.apply_gate(Gate_test, [1])
-print(Register)
-"""
-"""m = [[0 for ___ in range(2**10)] for __ in range(2**10)]
-for _ in range(2**10):
-    m[_][_] = 1
-input = np.array(m)
-output = trace_register(input)"""
-
-
+# State preparation
 Register = Q_Register(10)
+indices = [0,840,816,120,720,408,480,680]
+Register.state[0] = 0
+for i in indices:
+    Register.state[i] = (1/np.sqrt(8))
+
+HGate = Gate("Sparse", "hadamard")
 XGate = Gate("Sparse", "spinX")
+ZGate = Gate("Sparse", "spinZ")
 CGate = Gate("Sparse","cNot")
 
-Register.apply_gate(XGate, [1,2,3,4,5]) # Error at position with index 5 (qubit 6)
+Register.apply_gate(XGate, [1]) # Bit error at position with index 1 (qubit 2)
+Register.apply_gate(ZGate, [5]) # Phase error at position with index 5 (qubit 6)
 
-# State is |0111110000>
+
+# Test for bit error first
 
 # First parity check
 paritylist1 = [0,2,4,6] # check qubits in positions 1,3,5,7
 for i in paritylist1:
     Register.apply_gate(CGate, [i,9])
+
 
 # Second parity check
 paritylist2 = [1,2,5,6] # check qubits in positions 2,3,6,7
@@ -93,8 +95,6 @@ paritylist3 = [3,4,5,6] # check qubits in positions 4,5,6,7
 for i in paritylist3:
     Register.apply_gate(CGate, [i,7])
 
-# State should now be in the state |0111110110>
-
 densitymat = DenseMatrix(np.outer(Register.state,Register.state))
 Id = DenseMatrix(np.eye(128))
 errorpos = 0
@@ -102,22 +102,85 @@ errorpos = 0
 for i in range(8):
     TensorProd = TensorProduct([Id,base_states_matrices[i]]).denseTensorProduct()
     matrix = TensorProd.Multiply(densitymat)
-    if np.any(matrix.DenseApply(np.ones(2**10))) == False:
+    if not np.any(matrix.inputArray) == True:
         pass
     else:
         errorpos += i
         break
 
 if errorpos == 0:
-    print("There is no error.")
+    print("There is no bit error.")
 else:
-    print("The error is in qubit " + str(errorpos))
+    print("The bit error is in qubit " + str(errorpos))
 
 Register.apply_gate(XGate, [errorpos-1])
+
+if errorpos == 0:
+    pass
+elif errorpos == 1:
+    Register.apply_gate(XGate, [9])
+elif errorpos == 2:
+    Register.apply_gate(XGate, [8])
+elif errorpos == 3:
+    Register.apply_gate(XGate, [8,9])
+elif errorpos == 4:
+    Register.apply_gate(XGate, [7])
+elif errorpos == 5:
+    Register.apply_gate(XGate, [7,9])
+elif errorpos == 6:
+    Register.apply_gate(XGate, [7,8])
+elif errorpos == 7:
+    Register.apply_gate(XGate, [7,8,9])
+
+# Return ancilla qubits to |000>
+
+Register.apply_gate(HGate, [0,1,2,3,4,5,6])
+
+# Change basis of the system to change phase errors into bit flip errors
+
+# First parity check
+for i in paritylist1:
+    Register.apply_gate(CGate, [i,9])
+
+# Second parity check
+for i in paritylist2:
+    Register.apply_gate(CGate, [i,8])
+
+# Third parity check
+for i in paritylist3:
+    Register.apply_gate(CGate, [i,7])
+
+densitymat2 = DenseMatrix(np.outer(Register.state,Register.state))
+errorpos2 = 0
+
+for i in range(8):
+    TensorProd = TensorProduct([Id,base_states_matrices[i]]).denseTensorProduct()
+    matrix2 = TensorProd.Multiply(densitymat2)
+    if not np.any(matrix2.inputArray) == True:
+        pass
+    else:
+        errorpos2 += i
+        break
+
+if errorpos2 == 0:
+    print("There is no phase error.")
+else:
+    print("The phase error is in qubit " + str(errorpos2))
+
+# Fix error
+Register.apply_gate(XGate, [errorpos2-1])
+# Return to initial basis
+Register.apply_gate(HGate, [0,1,2,3,4,5,6])
+
 newdensitymat = DenseMatrix(np.outer(Register.state,Register.state))
 
-FinalCleanDensityMat = trace_register(TensorProduct([Id,base_states_matrices[errorpos]]).denseTensorProduct().Multiply(newdensitymat))
-FinalCleanStateVec = FinalCleanDensityMat.DenseApply(np.ones(2**7))
+FinalCleanDensityMat = trace_register(TensorProduct([Id,base_states_matrices[errorpos2]]).denseTensorProduct().Multiply(newdensitymat))
+FinalCleanStateVec = np.diagonal(FinalCleanDensityMat.inputArray).copy()
+for i in range(len(FinalCleanStateVec)):
+    if FinalCleanStateVec[i] < 0.0001:
+        FinalCleanStateVec[i] = 0
+FinalCleanStateVec = normalize(FinalCleanStateVec)
+
 print(FinalCleanStateVec)
 
 
