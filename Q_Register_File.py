@@ -121,7 +121,7 @@ class Q_Register:
                 self.normalize()
                 return NewState
 
-            else:  # Lazy ?????
+            else:  
                 pass
         else:
             Control = index[0]
@@ -163,7 +163,7 @@ class Q_Register:
                 self.state = DenseMatrix(NewState)
                 self.normalize()
                 return NewState
-            else:  # Lazy ?????
+            else:  
                 pass
 
     def measure(self):

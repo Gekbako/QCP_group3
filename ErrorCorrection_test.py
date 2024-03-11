@@ -54,73 +54,189 @@ def trace_single(matrix):
         return 0
     else:
         return matrix[0, 0] + matrix[1][1]
+    
+def normalize(vector):
+    """
+    Normalizes a given vector
+    """
+    norm = np.linalg.norm(vector)
+    if norm == 0: 
+       return vector
+    return vector / norm
+
+def runexampleQEC(bitindex, phaseindex):
+
+    """
+    Runs quantum error correction on the CSS code construction of the Hamming [7,4,3] code. Takes the code for the |0> state, applies the errors to the code
+    and subsequently fixes them using parity checks. To do so, a 10 qubit state vector is used, where the first 7 qubits are the code and the last 3 qubits 
+    are ancilla qubits. Parity checks are performed by using cNOT gate operations on the appropiate qubits and the ancilla. The index of the bit error is first
+    calculated and the error is fixed. The ancilla qubits are then reset and the basis of the vector is changed with Hadamard gates. This maps phase errors into
+    bit errors in the new basis. The same procedure is then performed to fix the error. Finally the state is returned to the initial state. The final corrected
+    state is returned together with the indices for the bit and phase errors (qubit index = qubit number -1, qubit 1 has index 0).
+    ------
+    Input:
+
+    bitindex - index for bit error placement
+    phaseindex - index for phase error placement
+
+    Output:
+
+    FinalCleanStateVec = 7 qubit state that corresponds to the corrected Hamming[7,4,3] CSS code construction of |0> (should always return this unless error correction
+    has not worked correctly)
+    errorpos1 - index for bit error (should be the same as bitindex)
+    errorpos2 - index for phase error (should be the same as phaseindex)
+
+    """
+
+    # State preparation (represents |0> state)
+    Register = Q_Register(10)
+    indices = [0,840,816,120,720,408,480,680]
+    Register.state[0] = 0
+    for i in indices:
+        Register.state[i] = (1/np.sqrt(8))
+
+    HGate = Gate("Sparse", "hadamard")
+    XGate = Gate("Sparse", "spinX")
+    ZGate = Gate("Sparse", "spinZ")
+    CGate = Gate("Sparse","cNot")
+
+    Register.apply_gate(XGate, [bitindex]) 
+    Register.apply_gate(ZGate, [phaseindex]) 
 
 
-"""
- Register = Q_Register(2)
-Gate_test = Gate("Sparse", "spinX")
+    # Test for bit error first
 
-Register.apply_gate(Gate_test, [1])
-print(Register)
-"""
-"""m = [[0 for ___ in range(2**10)] for __ in range(2**10)]
-for _ in range(2**10):
-    m[_][_] = 1
-input = np.array(m)
-output = trace_register(input)"""
+    # First parity check
+    paritylist1 = [0,2,4,6] # check qubits in positions 1,3,5,7
+    for i in paritylist1:
+        Register.apply_gate(CGate, [i,9])
 
 
-Register = Q_Register(10)
-XGate = Gate("Sparse", "spinX")
-CGate = Gate("Sparse","cNot")
+    # Second parity check
+    paritylist2 = [1,2,5,6] # check qubits in positions 2,3,6,7
+    for i in paritylist2:
+        Register.apply_gate(CGate, [i,8])
 
-Register.apply_gate(XGate, [1,2,3,4,5]) # Error at position with index 5 (qubit 6)
+    # Third parity check
+    paritylist3 = [3,4,5,6] # check qubits in positions 4,5,6,7
+    for i in paritylist3:
+        Register.apply_gate(CGate, [i,7])
 
-# State is |0111110000>
+    densitymat = DenseMatrix(np.outer(Register.state,Register.state))
+    Id = DenseMatrix(np.eye(128))
+    errorpos = 0
 
-# First parity check
-paritylist1 = [0,2,4,6] # check qubits in positions 1,3,5,7
-for i in paritylist1:
-    Register.apply_gate(CGate, [i,9])
+    # Get error position by multiplying with an orthogonal set of matrices corresponding to each basis state density matrix
 
-# Second parity check
-paritylist2 = [1,2,5,6] # check qubits in positions 2,3,6,7
-for i in paritylist2:
-    Register.apply_gate(CGate, [i,8])
+    for i in range(8):
+        TensorProd = TensorProduct([Id,base_states_matrices[i]]).denseTensorProduct()
+        matrix = TensorProd.Multiply(densitymat)
+        if not np.any(matrix.inputArray) == True:
+            pass
+        else:
+            errorpos += i
+            break
 
-# Third parity check
-paritylist3 = [3,4,5,6] # check qubits in positions 4,5,6,7
-for i in paritylist3:
-    Register.apply_gate(CGate, [i,7])
-
-# State should now be in the state |0111110110>
-
-densitymat = DenseMatrix(np.outer(Register.state,Register.state))
-Id = DenseMatrix(np.eye(128))
-errorpos = 0
-
-for i in range(8):
-    TensorProd = TensorProduct([Id,base_states_matrices[i]]).denseTensorProduct()
-    matrix = TensorProd.Multiply(densitymat)
-    if np.any(matrix.DenseApply(np.ones(2**10))) == False:
-        pass
+    if errorpos == 0:
+        print("There is no bit error.")
     else:
-        errorpos += i
-        break
+        print("The bit error is in qubit " + str(errorpos))
 
-if errorpos == 0:
-    print("There is no error.")
-else:
-    print("The error is in qubit " + str(errorpos))
+    # Fix error 
+        
+    Register.apply_gate(XGate, [errorpos-1])
 
-Register.apply_gate(XGate, [errorpos-1])
-newdensitymat = DenseMatrix(np.outer(Register.state,Register.state))
+    # Return ancilla qubits to |000>
 
-FinalCleanDensityMat = trace_register(TensorProduct([Id,base_states_matrices[errorpos]]).denseTensorProduct().Multiply(newdensitymat))
-FinalCleanStateVec = FinalCleanDensityMat.DenseApply(np.ones(2**7))
-print(FinalCleanStateVec)
+    if errorpos == 0:
+        pass
+    elif errorpos == 1:
+        Register.apply_gate(XGate, [9])
+    elif errorpos == 2:
+        Register.apply_gate(XGate, [8])
+    elif errorpos == 3:
+        Register.apply_gate(XGate, [8,9])
+    elif errorpos == 4:
+        Register.apply_gate(XGate, [7])
+    elif errorpos == 5:
+        Register.apply_gate(XGate, [7,9])
+    elif errorpos == 6:
+        Register.apply_gate(XGate, [7,8])
+    elif errorpos == 7:
+        Register.apply_gate(XGate, [7,8,9])
+    
+
+    # Change basis of the system to change phase errors into bit flip errors
+
+    Register.apply_gate(HGate, [0,1,2,3,4,5,6])
+
+    # Run parity checks again
+
+    # First parity check
+    for i in paritylist1:
+        Register.apply_gate(CGate, [i,9])
+
+    # Second parity check
+    for i in paritylist2:
+        Register.apply_gate(CGate, [i,8])
+
+    # Third parity check
+    for i in paritylist3:
+        Register.apply_gate(CGate, [i,7])
+
+    # Return to initial basis
+
+    Register.apply_gate(HGate, [0,1,2,3,4,5,6])
+
+    densitymat2 = DenseMatrix(np.outer(Register.state,Register.state))
+    errorpos2 = 0
+
+    # Same procedure to find error position
+
+    for i in range(8):
+        TensorProd2 = TensorProduct([Id,base_states_matrices[i]]).denseTensorProduct()
+        matrix2 = TensorProd2.Multiply(densitymat2)
+        if not np.any(matrix2.inputArray) == True:
+            pass
+        else:
+            errorpos2 += i
+            break
+
+    if errorpos2 == 0:
+        print("There is no phase error.")
+    else:
+        print("The phase error is in qubit " + str(errorpos2))
+
+    # Fix error
+        
+    Register.apply_gate(ZGate, [errorpos2-1])
+
+    # Find density matrix of final corrected state vector (note that ancilla qubits are still there)
+
+    newdensitymat = DenseMatrix(np.outer(Register.state,Register.state))
+
+    # Trace out ancilla qubits
+
+    FinalCleanDensityMat = trace_register(TensorProduct([Id,base_states_matrices[errorpos2]]).denseTensorProduct().Multiply(newdensitymat))
+
+    # Diagonal elements of traced out density matrix correspond to the superposed states
+
+    FinalCleanStateVec = np.diagonal(FinalCleanDensityMat.inputArray).copy()
+
+    # Clean up float value numpy errors (where sometimes 0 is written as a very small number) and normalize
+
+    for i in range(len(FinalCleanStateVec)):
+        if FinalCleanStateVec[i] < 0.0001:
+            FinalCleanStateVec[i] = 0
+    FinalCleanStateVec = normalize(FinalCleanStateVec)
+
+    # Print out corrected state (should be a superposition of 8 basis states in the 7 qubit computational basis)
+
+    return(FinalCleanStateVec, errorpos-1, errorpos2-1)
 
 
-
-
+StateVec, bitindex, phaseindex = runexampleQEC(1,5)
+print(StateVec)
+print(bitindex)
+print(phaseindex)
 

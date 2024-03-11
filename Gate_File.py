@@ -52,7 +52,7 @@ class Gate(object):
 
     def gateMethod(self):
         if self.gateName == "hadamard":
-            gate = 1/np.sqrt(2) * np.array([[1, 1], [1, -1]])
+            gate = (1/np.sqrt(2)) * np.array([[1, 1], [1, -1]])
         elif self.gateName == "cNot":
             gate = np.array([[1, 0, 0, 0], [0, 1, 0, 0],
                             [0, 0, 0, 1], [0, 0, 1, 0]])
@@ -64,7 +64,7 @@ class Gate(object):
         elif self.gateName == "spinY":
             gate = np.array([[0, -1j], [1j, 0]])
         elif self.gateName == "spinZ":
-            gate = np.array([[1, 1], [0, -1]])
+            gate = np.array([[1, 0], [0, -1]])
         elif self.gateName == "custom":
             gate = self.customInput
 
