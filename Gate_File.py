@@ -52,7 +52,7 @@ class Gate(object):
 
     def gateMethod(self):
         if self.gateName == "hadamard":
-            gate = 1/np.sqrt(2) * np.array([[1, 1], [1, -1]])
+            gate = (1/np.sqrt(2)) * np.array([[1, 1], [1, -1]])
         elif self.gateName == "cNot":
             gate = np.array([[1, 0, 0, 0], [0, 1, 0, 0],
                             [0, 0, 0, 1], [0, 0, 1, 0]])

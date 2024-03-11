@@ -108,7 +108,7 @@ class Q_Register:
                 self.state = NewState
                 return NewState
 
-            else:  # Lazy ?????
+            else:  
                 pass
         else:
             Control = index[0]
@@ -148,7 +148,7 @@ class Q_Register:
                 NewState = DenseSwapBackward.DenseApply(NewState2)
                 self.state = DenseMatrix(NewState)
                 return NewState
-            else:  # Lazy ?????
+            else:  
                 pass
 
     def measure(self):
