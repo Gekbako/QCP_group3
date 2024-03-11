@@ -70,14 +70,25 @@ class Q_Register:
             self.state = np.squeeze(TensorProduct(
                 to_tens_prod).denseTensorProduct().inputArray)
 
+    def normalize(self):
+        """
+        Normalizes the state of the Quantum Register
+
+        """
+        factor = np.sqrt((self.state*np.conj(self.state)).sum())
+        print(factor)
+        self.state /= factor
+
     def apply_gate(self, gate: Gate, index):
         """
         Applies gate to qubit/qubits in index and return the new state of the Q_Register
-        Arg:
-        gate : matrix representation of the gate
+
+        Args:
+        gate [Gate] : matrix representation of the gate
         index (list) : qubit index that the gate should be applied to (NOTE If gate is cNot/cV, first index in list is control, second is target)
+
         Returns:
-        The register with the modified state
+        NewState [np.array]: the register with the modified state
         """
         # TODO: we assume the gate is compatible with the register
         # -> qRegState is of size 2**n * 1 and gate 2**n * 2**n
@@ -94,6 +105,7 @@ class Q_Register:
                 TensorGate = TensorProduct(TensorList).sparseTensorProduct()
                 NewState = TensorGate.SparseApply(State)
                 self.state = NewState
+                self.normalize()
                 return NewState
             elif gate.matrixType == "Dense":
                 Identity = DenseMatrix(np.array([[1, 0], [0, 1]]))
@@ -106,6 +118,7 @@ class Q_Register:
                 NewState = TensorGate.DenseApply(State.inputArray)
                 NewState = DenseMatrix(NewState)
                 self.state = NewState
+                self.normalize()
                 return NewState
 
             else:  # Lazy ?????
@@ -134,6 +147,7 @@ class Q_Register:
                 NewState2 = TensorGate.SparseApply(NewState1)
                 NewState = SwapMatrixBackward.SparseApply(NewState2)
                 self.state = NewState
+                self.normalize()
                 return NewState
             elif gate.matrixType == "Dense":
                 DenseSwapForward = DenseMatrix(SwapMatrixForward.Dense())
@@ -147,6 +161,7 @@ class Q_Register:
                 NewState2 = TensorGate.DenseApply(NewState1)
                 NewState = DenseSwapBackward.DenseApply(NewState2)
                 self.state = DenseMatrix(NewState)
+                self.normalize()
                 return NewState
             else:  # Lazy ?????
                 pass
@@ -176,8 +191,10 @@ class Q_Register:
 a = np.array([1+1j, 2+2j], dtype=complex)
 b = np.array([3+3j, 4+4j], dtype=complex)
 # , 1/np.sqrt(2)*np.array([1+0j, 1+0j, 1+0j, 1+0j, 1+0j, 1+0j]))
-q = Q_Register(7)
-
+q = Q_Register(2, np.array([2+0j, 3j, 1+0j, 4j]))
+# print(q)
+q.normalize()
+# print(q)
 
 """
 print(q)
