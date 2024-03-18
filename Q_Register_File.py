@@ -69,6 +69,7 @@ class Q_Register:
                 to_tens_prod.append(DenseMatrix(temp[i].state))
             self.state = np.squeeze(TensorProduct(
                 to_tens_prod).denseTensorProduct().inputArray)
+            self.normalize()
 
     def normalize(self):
         """
