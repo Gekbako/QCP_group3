@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>QCP_group3.LazyMatrix_File API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>QCP_group3.LazyMatrix_File</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import numpy as np 
+from abc import ABC, abstractmethod 
+from Sparse import SparseMatrix  
+
+
+class LinearOperator(ABC):
+    &#39;&#39;&#39;
+    Class to represent linear operators i.e. quantum gates. Linear operators will either take 
+    the form of dense-, sparse-, or lazy matrices. Class must fullfill requirements for linearity, 
+    i.e. contain a scalar multiplication and addition, as well as a multiplication. 
+    Furthermore it must be clear how each Linear Operator is applied to a quantum register. 
+    Being able to print out a matrix representation of a linear operator is an advantage. 
+
+    &#39;&#39;&#39;
+
+    @abstractmethod
+    def scale(self, factor):
+        pass
+
+    @abstractmethod
+    def multiply(self, other_operator):
+        pass
+
+    @abstractmethod
+    def __str__(self):
+        pass
+
+    
+
+class LazyMatrix(LinearOperator):   #or LazyMatrix(LinearOperator):
+    
+    def __init__(self, dimension, apply):
+        &#39;&#39;&#39;
+        Constructor. 
+
+        Input:
+        ------ 
+        dimension [int]   - the dimension of the operator
+        apply [func]      - function dictating the effect of applying LazyMatrix
+        &#39;&#39;&#39;
+
+        assert isinstance(dimension, int), f&#34;Dimension must be an integer, received type {type(dimension)}.&#34;
+        self.Dimension = dimension
+        self.Apply = apply
+        self.Cache = None
+
+    
+    def multiply(self, otherOperator):
+        &#39;&#39;&#39;
+        Function to determine effect of multiplying two LazyMatrices. 
+
+        Input:
+        ------ 
+        otherOperator [LazyMatrix]   - the operator to be multiplied with. Must be of type LazyMatrix and 
+                                                of same dimensionality as self. 
+
+        Returns:
+        ------ 
+        productOperator [LazyMatrix] - new LazyMatrix with same dimensionality as self and updated Apply
+                                                operation corresponding to the product of the two LazyMatrices. 
+        &#39;&#39;&#39;
+
+        assert isinstance(otherOperator, LazyMatrix) , f&#39;&#39;&#39;Lazy Matrix multiplication requires two Lazy Matrices
+                                                        but was given a {type(otherOperator)}.&#39;&#39;&#39;
+        assert self.Dimension == otherOperator.Dimension, &#34;Incompatible dimensions.&#34;
+
+        updatedApply = lambda v : self.Apply(otherOperator.Apply(v))
+        productOperator = LazyMatrix(self.Dimension, updatedApply)
+
+        return productOperator
+
+
+    def scale(self, factor):
+        &#39;&#39;&#39;
+        Function to scale Apply operation of self by given factor. 
+
+        Input: 
+        ------
+        factor [int, float]         - scaling factor to be applied
+
+        Returns:
+        ------ 
+        scaledOperator [LazyMatrix] - new LazyMatrix with scaled Apply operation. 
+        &#39;&#39;&#39;
+
+        assert isinstance(factor, (int, float)) , f&#39;&#39;&#39;Lazy Matrix scaling requires a float or int
+                                                        but was given a {type(factor)}.&#39;&#39;&#39;
+        
+        updatedApply = lambda v : factor * self.Apply(v)
+        scaledOperator = LazyMatrix(self.Dimension, updatedApply)
+
+        return scaledOperator
+    
+
+    def __SparseRepresentation(self):
+        &#39;&#39;&#39;
+        Function to convert LazyMatrix to a SparseMatrix. Conversion performed by application of 
+        Apply operation to each basis element. 
+
+        Returns:
+        ------ 
+        sparseRepresentation [SparseMatrix]   - a sparse representation of the more abstract LazyMatrix self
+        &#39;&#39;&#39;
+ 
+        sparseRepresentation = SparseMatrix(self.Dimension)
+        basisElement = np.zeros(self.Dimension, dtype = complex) 
+
+        for col in range(self.Dimension):  
+            basisElement[col] += 1                      
+            column = self.Apply(basisElement)
+            
+
+            for row in range(self.Dimension):
+                sparseRepresentation[row, col] = column[row] 
+
+            basisElement[col] -= 1
+
+        self.Cache = sparseRepresentation  # will this work as intended? And not take up memory until __str__ called?   
+
+
+    def __getitem__(self, index):
+        if self.Cache is None : self.__SparseRepresentation()
+        
+        return self.Cache[index]
+
+
+    def __str__(self):
+        if self.Cache is None : self.__SparseRepresentation()
+            
+        return str(self.Cache)
+
+
+
+
+#________________________________________________________________________________________________</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="QCP_group3.LazyMatrix_File.LazyMatrix"><code class="flex name class">
+<span>class <span class="ident">LazyMatrix</span></span>
+<span>(</span><span>dimension, apply)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class to represent linear operators i.e. quantum gates. Linear operators will either take
+the form of dense-, sparse-, or lazy matrices. Class must fullfill requirements for linearity,
+i.e. contain a scalar multiplication and addition, as well as a multiplication.
+Furthermore it must be clear how each Linear Operator is applied to a quantum register.
+Being able to print out a matrix representation of a linear operator is an advantage. </p>
+<p>Constructor. </p>
+<h2 id="input">Input:</h2>
+<p>dimension [int]
+- the dimension of the operator
+apply [func]
+- function dictating the effect of applying LazyMatrix</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LazyMatrix(LinearOperator):   #or LazyMatrix(LinearOperator):
+    
+    def __init__(self, dimension, apply):
+        &#39;&#39;&#39;
+        Constructor. 
+
+        Input:
+        ------ 
+        dimension [int]   - the dimension of the operator
+        apply [func]      - function dictating the effect of applying LazyMatrix
+        &#39;&#39;&#39;
+
+        assert isinstance(dimension, int), f&#34;Dimension must be an integer, received type {type(dimension)}.&#34;
+        self.Dimension = dimension
+        self.Apply = apply
+        self.Cache = None
+
+    
+    def multiply(self, otherOperator):
+        &#39;&#39;&#39;
+        Function to determine effect of multiplying two LazyMatrices. 
+
+        Input:
+        ------ 
+        otherOperator [LazyMatrix]   - the operator to be multiplied with. Must be of type LazyMatrix and 
+                                                of same dimensionality as self. 
+
+        Returns:
+        ------ 
+        productOperator [LazyMatrix] - new LazyMatrix with same dimensionality as self and updated Apply
+                                                operation corresponding to the product of the two LazyMatrices. 
+        &#39;&#39;&#39;
+
+        assert isinstance(otherOperator, LazyMatrix) , f&#39;&#39;&#39;Lazy Matrix multiplication requires two Lazy Matrices
+                                                        but was given a {type(otherOperator)}.&#39;&#39;&#39;
+        assert self.Dimension == otherOperator.Dimension, &#34;Incompatible dimensions.&#34;
+
+        updatedApply = lambda v : self.Apply(otherOperator.Apply(v))
+        productOperator = LazyMatrix(self.Dimension, updatedApply)
+
+        return productOperator
+
+
+    def scale(self, factor):
+        &#39;&#39;&#39;
+        Function to scale Apply operation of self by given factor. 
+
+        Input: 
+        ------
+        factor [int, float]         - scaling factor to be applied
+
+        Returns:
+        ------ 
+        scaledOperator [LazyMatrix] - new LazyMatrix with scaled Apply operation. 
+        &#39;&#39;&#39;
+
+        assert isinstance(factor, (int, float)) , f&#39;&#39;&#39;Lazy Matrix scaling requires a float or int
+                                                        but was given a {type(factor)}.&#39;&#39;&#39;
+        
+        updatedApply = lambda v : factor * self.Apply(v)
+        scaledOperator = LazyMatrix(self.Dimension, updatedApply)
+
+        return scaledOperator
+    
+
+    def __SparseRepresentation(self):
+        &#39;&#39;&#39;
+        Function to convert LazyMatrix to a SparseMatrix. Conversion performed by application of 
+        Apply operation to each basis element. 
+
+        Returns:
+        ------ 
+        sparseRepresentation [SparseMatrix]   - a sparse representation of the more abstract LazyMatrix self
+        &#39;&#39;&#39;
+ 
+        sparseRepresentation = SparseMatrix(self.Dimension)
+        basisElement = np.zeros(self.Dimension, dtype = complex) 
+
+        for col in range(self.Dimension):  
+            basisElement[col] += 1                      
+            column = self.Apply(basisElement)
+            
+
+            for row in range(self.Dimension):
+                sparseRepresentation[row, col] = column[row] 
+
+            basisElement[col] -= 1
+
+        self.Cache = sparseRepresentation  # will this work as intended? And not take up memory until __str__ called?   
+
+
+    def __getitem__(self, index):
+        if self.Cache is None : self.__SparseRepresentation()
+        
+        return self.Cache[index]
+
+
+    def __str__(self):
+        if self.Cache is None : self.__SparseRepresentation()
+            
+        return str(self.Cache)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="QCP_group3.LazyMatrix_File.LinearOperator" href="#QCP_group3.LazyMatrix_File.LinearOperator">LinearOperator</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="QCP_group3.LazyMatrix_File.LazyMatrix.multiply"><code class="name flex">
+<span>def <span class="ident">multiply</span></span>(<span>self, otherOperator)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to determine effect of multiplying two LazyMatrices. </p>
+<h2 id="input">Input:</h2>
+<p>otherOperator [LazyMatrix]
+- the operator to be multiplied with. Must be of type LazyMatrix and
+of same dimensionality as self. </p>
+<h2 id="returns">Returns:</h2>
+<p>productOperator [LazyMatrix] - new LazyMatrix with same dimensionality as self and updated Apply
+operation corresponding to the product of the two LazyMatrices.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def multiply(self, otherOperator):
+    &#39;&#39;&#39;
+    Function to determine effect of multiplying two LazyMatrices. 
+
+    Input:
+    ------ 
+    otherOperator [LazyMatrix]   - the operator to be multiplied with. Must be of type LazyMatrix and 
+                                            of same dimensionality as self. 
+
+    Returns:
+    ------ 
+    productOperator [LazyMatrix] - new LazyMatrix with same dimensionality as self and updated Apply
+                                            operation corresponding to the product of the two LazyMatrices. 
+    &#39;&#39;&#39;
+
+    assert isinstance(otherOperator, LazyMatrix) , f&#39;&#39;&#39;Lazy Matrix multiplication requires two Lazy Matrices
+                                                    but was given a {type(otherOperator)}.&#39;&#39;&#39;
+    assert self.Dimension == otherOperator.Dimension, &#34;Incompatible dimensions.&#34;
+
+    updatedApply = lambda v : self.Apply(otherOperator.Apply(v))
+    productOperator = LazyMatrix(self.Dimension, updatedApply)
+
+    return productOperator</code></pre>
+</details>
+</dd>
+<dt id="QCP_group3.LazyMatrix_File.LazyMatrix.scale"><code class="name flex">
+<span>def <span class="ident">scale</span></span>(<span>self, factor)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to scale Apply operation of self by given factor. </p>
+<h2 id="input">Input:</h2>
+<p>factor [int, float]
+- scaling factor to be applied</p>
+<h2 id="returns">Returns:</h2>
+<p>scaledOperator [LazyMatrix] - new LazyMatrix with scaled Apply operation.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def scale(self, factor):
+    &#39;&#39;&#39;
+    Function to scale Apply operation of self by given factor. 
+
+    Input: 
+    ------
+    factor [int, float]         - scaling factor to be applied
+
+    Returns:
+    ------ 
+    scaledOperator [LazyMatrix] - new LazyMatrix with scaled Apply operation. 
+    &#39;&#39;&#39;
+
+    assert isinstance(factor, (int, float)) , f&#39;&#39;&#39;Lazy Matrix scaling requires a float or int
+                                                    but was given a {type(factor)}.&#39;&#39;&#39;
+    
+    updatedApply = lambda v : factor * self.Apply(v)
+    scaledOperator = LazyMatrix(self.Dimension, updatedApply)
+
+    return scaledOperator</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="QCP_group3.LazyMatrix_File.LinearOperator"><code class="flex name class">
+<span>class <span class="ident">LinearOperator</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class to represent linear operators i.e. quantum gates. Linear operators will either take
+the form of dense-, sparse-, or lazy matrices. Class must fullfill requirements for linearity,
+i.e. contain a scalar multiplication and addition, as well as a multiplication.
+Furthermore it must be clear how each Linear Operator is applied to a quantum register.
+Being able to print out a matrix representation of a linear operator is an advantage.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LinearOperator(ABC):
+    &#39;&#39;&#39;
+    Class to represent linear operators i.e. quantum gates. Linear operators will either take 
+    the form of dense-, sparse-, or lazy matrices. Class must fullfill requirements for linearity, 
+    i.e. contain a scalar multiplication and addition, as well as a multiplication. 
+    Furthermore it must be clear how each Linear Operator is applied to a quantum register. 
+    Being able to print out a matrix representation of a linear operator is an advantage. 
+
+    &#39;&#39;&#39;
+
+    @abstractmethod
+    def scale(self, factor):
+        pass
+
+    @abstractmethod
+    def multiply(self, other_operator):
+        pass
+
+    @abstractmethod
+    def __str__(self):
+        pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="QCP_group3.LazyMatrix_File.LazyMatrix" href="#QCP_group3.LazyMatrix_File.LazyMatrix">LazyMatrix</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="QCP_group3.LazyMatrix_File.LinearOperator.multiply"><code class="name flex">
+<span>def <span class="ident">multiply</span></span>(<span>self, other_operator)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def multiply(self, other_operator):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="QCP_group3.LazyMatrix_File.LinearOperator.scale"><code class="name flex">
+<span>def <span class="ident">scale</span></span>(<span>self, factor)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def scale(self, factor):
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="QCP_group3" href="index.html">QCP_group3</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="QCP_group3.LazyMatrix_File.LazyMatrix" href="#QCP_group3.LazyMatrix_File.LazyMatrix">LazyMatrix</a></code></h4>
+<ul class="">
+<li><code><a title="QCP_group3.LazyMatrix_File.LazyMatrix.multiply" href="#QCP_group3.LazyMatrix_File.LazyMatrix.multiply">multiply</a></code></li>
+<li><code><a title="QCP_group3.LazyMatrix_File.LazyMatrix.scale" href="#QCP_group3.LazyMatrix_File.LazyMatrix.scale">scale</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="QCP_group3.LazyMatrix_File.LinearOperator" href="#QCP_group3.LazyMatrix_File.LinearOperator">LinearOperator</a></code></h4>
+<ul class="">
+<li><code><a title="QCP_group3.LazyMatrix_File.LinearOperator.multiply" href="#QCP_group3.LazyMatrix_File.LinearOperator.multiply">multiply</a></code></li>
+<li><code><a title="QCP_group3.LazyMatrix_File.LinearOperator.scale" href="#QCP_group3.LazyMatrix_File.LinearOperator.scale">scale</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

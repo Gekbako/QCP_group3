@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>QCP_group3.GroverFromCircuit API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>QCP_group3.GroverFromCircuit</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from Circuit import *
+import time
+
+class GroverCircuit(Circuit):
+    &#39;&#39;&#39;
+    Class to implement Grover&#39;s alogrithm on a qubit register of given size. Inherits from Circuit class.
+    Works through application of the composite Grover diffusion operator, explained further in report, a total of 
+    ceiling(np.pi / 4 * np.sqrt(self.Dimension)) times to a qubit register initialised in a state of equal superposition.
+    
+    Class variables: 
+        matrixType [str]             -   the type of matrix implementation (&#34;dense&#34;, &#34;sparse&#34;, or &#34;lazy&#34;).
+        numberOfQubits [int]         -   the number of qubits in qubit register.
+        targetState [int]            -   the goal state to be found by Grover&#39;s algorithm.
+        GroverMatrix [matrixType]    -   matrix of matrixType type, on form diag(1, -1, -1, ...).
+        Oracle [matrixType]          -   matrix of matrixType type, on form diag(-1, -1, ..., 1, ...) where the positive entry
+                                         is aligned with targetState.
+        savedTensor [matrixType]     -   matrix of H^{tensor_n}, corresponding to application of Hadamard gates to every qubit. 
+    &#39;&#39;&#39;
+    def __init__(self, matrixType, numberOfQubits, targetState):
+        super().__init__(matrixType, numberOfQubits)
+        assert targetState &lt; 2**numberOfQubits, f&#34;Target state {targetState} out of reach for quantum system of {numberOfQubits} qubits. Must have targetState &lt; {2**numberOfQubits}.&#34;
+        self.TargetState = targetState
+        
+        if matrixType == &#34;Dense&#34;:
+
+            hadamardIndices = np.arange(numberOfQubits) 
+            self.AddGate(&#34;hadamard&#34;, hadamardIndices) 
+            self.AddLayer() # prepare quantum register in H^tensor_n state for Grover circuit    
+            self.GroverMatrix = -np.identity(self.Dimension)
+
+            self.Oracle = -self.GroverMatrix
+            self.Oracle[targetState, targetState] = -1
+            self.Oracle = DenseMatrix(self.Oracle)
+
+            self.GroverMatrix[0, 0] = 1
+            self.GroverMatrix = DenseMatrix(self.GroverMatrix)
+
+        elif matrixType == &#34;Sparse&#34;:
+
+            hadamardIndices = np.arange(numberOfQubits) 
+            self.AddGate(&#34;hadamard&#34;, hadamardIndices) 
+            self.AddLayer() # prepare quantum register in H^tensor_n state for Grover circuit 
+
+            indices = np.arange(self.Dimension, dtype = int)
+            values = -np.ones(self.Dimension, dtype = int)
+            values[0] = 1
+            self.GroverMatrix = np.column_stack((indices, indices, values))
+            self.GroverMatrix = SparseMatrix(self.Dimension, self.GroverMatrix)
+
+            values[0] = -1
+            values = -values 
+            values[targetState] = -1
+            self.Oracle = np.column_stack((indices, indices, values))
+            self.Oracle = SparseMatrix(self.Dimension, self.Oracle)
+
+        elif matrixType == &#34;Lazy&#34;:
+
+            self.hadamardGate = Gate(&#34;Sparse&#34;, &#34;hadamard&#34;).GateMatrix 
+            
+            # create n-dim Hadamard tensor bitwise and lazily 
+            hadamardBitwise = BitwiseGate([0], self.hadamardGate.Dimension, (self.Dimension), self.hadamardGate.Elements)
+            self.hadamardBitwiseLazy = LazyMatrix(self.Dimension, hadamardBitwise.Apply)
+            for i in range(1, self.NumberOfQubits):
+                hadamardBitwise = BitwiseGate([i], self.hadamardGate.Dimension, (self.Dimension), self.hadamardGate.Elements)
+                self.hadamardBitwiseLazy = self.hadamardBitwiseLazy.multiply(LazyMatrix(self.Dimension, hadamardBitwise.Apply))
+            
+            # prepare quantum register in H^tensor_n state for Grover circuit
+            self.Register.state = self.hadamardBitwiseLazy.Apply(self.Register.state)
+
+            # create Grover matrix to be applied Sparsely
+            indices = np.arange(self.Dimension, dtype = int)
+            values = -np.ones(self.Dimension, dtype = int)
+            values[0] = 1
+            self.GroverMatrix = np.column_stack((indices, indices, values))
+            self.GroverMatrix = SparseMatrix(self.Dimension, self.GroverMatrix)
+
+            # create Oracle matrix to be applied Sparsely
+            values[0] = -1
+            values = -values 
+            values[targetState] = -1
+            self.Oracle = np.column_stack((indices, indices, values))
+            self.Oracle = SparseMatrix(self.Dimension, self.Oracle)
+
+            # Lazify the matrices, create composite gate GroverDiffusionOperator 
+            self.GroverMatrix = LazyMatrix(self.Dimension, self.GroverMatrix.SparseApply)
+            self.Oracle = LazyMatrix(self.Dimension, self.Oracle.SparseApply)
+            self.GroverDiffusionOperator = self.Oracle.multiply(self.hadamardBitwiseLazy.multiply(self.GroverMatrix.multiply(self.hadamardBitwiseLazy)))
+            
+
+
+    def groverIteration(self):
+        &#39;&#39;&#39;
+        Function to apply a single Grover diffusion operator to register. 
+        &#39;&#39;&#39;
+        if self.MatrixType == &#39;Dense&#39;:
+            #Apply the Oracle
+            self.Register.state = self.Oracle.DenseApply(self.Register.state)
+                
+            #Apply the Grover
+            self.Register.state = self.SavedTensor.DenseApply(self.Register.state)
+            self.Register.state = self.GroverMatrix.DenseApply(self.Register.state)
+            self.Register.state = self.SavedTensor.DenseApply(self.Register.state)
+
+                
+        elif self.MatrixType == &#34;Sparse&#34;:
+            
+            #Apply the Oracle
+            self.Register.state = self.Oracle.SparseApply(self.Register.state)  
+
+            #Apply the Grover
+            self.Register.state = self.SavedTensor.SparseApply(self.Register.state)
+            self.Register.state = self.GroverMatrix.SparseApply(self.Register.state)
+            self.Register.state = self.SavedTensor.SparseApply(self.Register.state)
+ 
+
+        
+        elif self.MatrixType == &#34;Lazy&#34;:
+
+            # self.GroverDiffusionOperator = self.GroverDiffusionOperator.multiply(self.GroverDiffusionOperator)
+            self.Register.state = self.GroverDiffusionOperator.Apply(self.Register.state)
+
+            
+    def run(self):
+        &#39;&#39;&#39;
+        Function to run the complete Grover&#39;s algorithm with arguments specified in class instance. 
+
+        Input
+        ------
+        Nothing, all parameters are class variables. 
+
+        Returns
+        -------
+        finalState [np.array]   -   array specifying the final state of the qubit register *before* measurement.
+        result [int]            -   the index / state found by the algorithm.
+        measuredState [np.array]-   array specifying the state after measurement, i.e. when it has collapsed to measured state.
+        &#39;&#39;&#39;
+        numIterations = int(np.pi / 4 * np.sqrt(self.Dimension)) 
+        for i in range(numIterations):
+            self.groverIteration()
+        # self.Register.state = self.GroverDiffusionOperator.Apply(self.Register.state)
+
+        finalState = self.Register.state
+        # finalState = self.GroverDiffusionOperator.Apply(self.Register.state)
+        result = self.Register.measure()
+        measuredState = self.Register.state
+
+        return finalState, result, measuredState
+
+if __name__ == &#34;__main__&#34;:
+
+    startTime = time.time()
+
+    #Demonstration of the circuit
+    circuit = GroverCircuit(&#34;Lazy&#34;, 16, 32145)
+    state, result, measuredState = circuit.run()
+
+    # print(state)
+    # print(measuredState)
+    print(result)
+
+    endTime = time.time()
+    timeElapsed = endTime - startTime
+    print(f&#34;Time elapsed: {timeElapsed}s&#34;)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="QCP_group3.GroverFromCircuit.GroverCircuit"><code class="flex name class">
+<span>class <span class="ident">GroverCircuit</span></span>
+<span>(</span><span>matrixType, numberOfQubits, targetState)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class to implement Grover's alogrithm on a qubit register of given size. Inherits from Circuit class.
+Works through application of the composite Grover diffusion operator, explained further in report, a total of
+ceiling(np.pi / 4 * np.sqrt(self.Dimension)) times to a qubit register initialised in a state of equal superposition.</p>
+<p>Class variables:
+matrixType [str]
+-
+the type of matrix implementation ("dense", "sparse", or "lazy").
+numberOfQubits [int]
+-
+the number of qubits in qubit register.
+targetState [int]
+-
+the goal state to be found by Grover's algorithm.
+GroverMatrix [matrixType]
+-
+matrix of matrixType type, on form diag(1, -1, -1, &hellip;).
+Oracle [matrixType]
+-
+matrix of matrixType type, on form diag(-1, -1, &hellip;, 1, &hellip;) where the positive entry
+is aligned with targetState.
+savedTensor [matrixType]
+-
+matrix of H^{tensor_n}, corresponding to application of Hadamard gates to every qubit. </p>
+<h2 id="notes">Notes</h2>
+<p>This constructor must initialise a Qu Register and a "space to apply gates to". </p>
+<h2 id="input">Input:</h2>
+<p>numberOfQubits [int] - the number of qubits to tensor together to form the register
+matrixType [string] - the type of matrix implemented in gates. "dense", "sparse" or "lazy"</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroverCircuit(Circuit):
+    &#39;&#39;&#39;
+    Class to implement Grover&#39;s alogrithm on a qubit register of given size. Inherits from Circuit class.
+    Works through application of the composite Grover diffusion operator, explained further in report, a total of 
+    ceiling(np.pi / 4 * np.sqrt(self.Dimension)) times to a qubit register initialised in a state of equal superposition.
+    
+    Class variables: 
+        matrixType [str]             -   the type of matrix implementation (&#34;dense&#34;, &#34;sparse&#34;, or &#34;lazy&#34;).
+        numberOfQubits [int]         -   the number of qubits in qubit register.
+        targetState [int]            -   the goal state to be found by Grover&#39;s algorithm.
+        GroverMatrix [matrixType]    -   matrix of matrixType type, on form diag(1, -1, -1, ...).
+        Oracle [matrixType]          -   matrix of matrixType type, on form diag(-1, -1, ..., 1, ...) where the positive entry
+                                         is aligned with targetState.
+        savedTensor [matrixType]     -   matrix of H^{tensor_n}, corresponding to application of Hadamard gates to every qubit. 
+    &#39;&#39;&#39;
+    def __init__(self, matrixType, numberOfQubits, targetState):
+        super().__init__(matrixType, numberOfQubits)
+        assert targetState &lt; 2**numberOfQubits, f&#34;Target state {targetState} out of reach for quantum system of {numberOfQubits} qubits. Must have targetState &lt; {2**numberOfQubits}.&#34;
+        self.TargetState = targetState
+        
+        if matrixType == &#34;Dense&#34;:
+
+            hadamardIndices = np.arange(numberOfQubits) 
+            self.AddGate(&#34;hadamard&#34;, hadamardIndices) 
+            self.AddLayer() # prepare quantum register in H^tensor_n state for Grover circuit    
+            self.GroverMatrix = -np.identity(self.Dimension)
+
+            self.Oracle = -self.GroverMatrix
+            self.Oracle[targetState, targetState] = -1
+            self.Oracle = DenseMatrix(self.Oracle)
+
+            self.GroverMatrix[0, 0] = 1
+            self.GroverMatrix = DenseMatrix(self.GroverMatrix)
+
+        elif matrixType == &#34;Sparse&#34;:
+
+            hadamardIndices = np.arange(numberOfQubits) 
+            self.AddGate(&#34;hadamard&#34;, hadamardIndices) 
+            self.AddLayer() # prepare quantum register in H^tensor_n state for Grover circuit 
+
+            indices = np.arange(self.Dimension, dtype = int)
+            values = -np.ones(self.Dimension, dtype = int)
+            values[0] = 1
+            self.GroverMatrix = np.column_stack((indices, indices, values))
+            self.GroverMatrix = SparseMatrix(self.Dimension, self.GroverMatrix)
+
+            values[0] = -1
+            values = -values 
+            values[targetState] = -1
+            self.Oracle = np.column_stack((indices, indices, values))
+            self.Oracle = SparseMatrix(self.Dimension, self.Oracle)
+
+        elif matrixType == &#34;Lazy&#34;:
+
+            self.hadamardGate = Gate(&#34;Sparse&#34;, &#34;hadamard&#34;).GateMatrix 
+            
+            # create n-dim Hadamard tensor bitwise and lazily 
+            hadamardBitwise = BitwiseGate([0], self.hadamardGate.Dimension, (self.Dimension), self.hadamardGate.Elements)
+            self.hadamardBitwiseLazy = LazyMatrix(self.Dimension, hadamardBitwise.Apply)
+            for i in range(1, self.NumberOfQubits):
+                hadamardBitwise = BitwiseGate([i], self.hadamardGate.Dimension, (self.Dimension), self.hadamardGate.Elements)
+                self.hadamardBitwiseLazy = self.hadamardBitwiseLazy.multiply(LazyMatrix(self.Dimension, hadamardBitwise.Apply))
+            
+            # prepare quantum register in H^tensor_n state for Grover circuit
+            self.Register.state = self.hadamardBitwiseLazy.Apply(self.Register.state)
+
+            # create Grover matrix to be applied Sparsely
+            indices = np.arange(self.Dimension, dtype = int)
+            values = -np.ones(self.Dimension, dtype = int)
+            values[0] = 1
+            self.GroverMatrix = np.column_stack((indices, indices, values))
+            self.GroverMatrix = SparseMatrix(self.Dimension, self.GroverMatrix)
+
+            # create Oracle matrix to be applied Sparsely
+            values[0] = -1
+            values = -values 
+            values[targetState] = -1
+            self.Oracle = np.column_stack((indices, indices, values))
+            self.Oracle = SparseMatrix(self.Dimension, self.Oracle)
+
+            # Lazify the matrices, create composite gate GroverDiffusionOperator 
+            self.GroverMatrix = LazyMatrix(self.Dimension, self.GroverMatrix.SparseApply)
+            self.Oracle = LazyMatrix(self.Dimension, self.Oracle.SparseApply)
+            self.GroverDiffusionOperator = self.Oracle.multiply(self.hadamardBitwiseLazy.multiply(self.GroverMatrix.multiply(self.hadamardBitwiseLazy)))
+            
+
+
+    def groverIteration(self):
+        &#39;&#39;&#39;
+        Function to apply a single Grover diffusion operator to register. 
+        &#39;&#39;&#39;
+        if self.MatrixType == &#39;Dense&#39;:
+            #Apply the Oracle
+            self.Register.state = self.Oracle.DenseApply(self.Register.state)
+                
+            #Apply the Grover
+            self.Register.state = self.SavedTensor.DenseApply(self.Register.state)
+            self.Register.state = self.GroverMatrix.DenseApply(self.Register.state)
+            self.Register.state = self.SavedTensor.DenseApply(self.Register.state)
+
+                
+        elif self.MatrixType == &#34;Sparse&#34;:
+            
+            #Apply the Oracle
+            self.Register.state = self.Oracle.SparseApply(self.Register.state)  
+
+            #Apply the Grover
+            self.Register.state = self.SavedTensor.SparseApply(self.Register.state)
+            self.Register.state = self.GroverMatrix.SparseApply(self.Register.state)
+            self.Register.state = self.SavedTensor.SparseApply(self.Register.state)
+ 
+
+        
+        elif self.MatrixType == &#34;Lazy&#34;:
+
+            # self.GroverDiffusionOperator = self.GroverDiffusionOperator.multiply(self.GroverDiffusionOperator)
+            self.Register.state = self.GroverDiffusionOperator.Apply(self.Register.state)
+
+            
+    def run(self):
+        &#39;&#39;&#39;
+        Function to run the complete Grover&#39;s algorithm with arguments specified in class instance. 
+
+        Input
+        ------
+        Nothing, all parameters are class variables. 
+
+        Returns
+        -------
+        finalState [np.array]   -   array specifying the final state of the qubit register *before* measurement.
+        result [int]            -   the index / state found by the algorithm.
+        measuredState [np.array]-   array specifying the state after measurement, i.e. when it has collapsed to measured state.
+        &#39;&#39;&#39;
+        numIterations = int(np.pi / 4 * np.sqrt(self.Dimension)) 
+        for i in range(numIterations):
+            self.groverIteration()
+        # self.Register.state = self.GroverDiffusionOperator.Apply(self.Register.state)
+
+        finalState = self.Register.state
+        # finalState = self.GroverDiffusionOperator.Apply(self.Register.state)
+        result = self.Register.measure()
+        measuredState = self.Register.state
+
+        return finalState, result, measuredState</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>Circuit.Circuit</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="QCP_group3.GroverFromCircuit.GroverCircuit.groverIteration"><code class="name flex">
+<span>def <span class="ident">groverIteration</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to apply a single Grover diffusion operator to register.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def groverIteration(self):
+    &#39;&#39;&#39;
+    Function to apply a single Grover diffusion operator to register. 
+    &#39;&#39;&#39;
+    if self.MatrixType == &#39;Dense&#39;:
+        #Apply the Oracle
+        self.Register.state = self.Oracle.DenseApply(self.Register.state)
+            
+        #Apply the Grover
+        self.Register.state = self.SavedTensor.DenseApply(self.Register.state)
+        self.Register.state = self.GroverMatrix.DenseApply(self.Register.state)
+        self.Register.state = self.SavedTensor.DenseApply(self.Register.state)
+
+            
+    elif self.MatrixType == &#34;Sparse&#34;:
+        
+        #Apply the Oracle
+        self.Register.state = self.Oracle.SparseApply(self.Register.state)  
+
+        #Apply the Grover
+        self.Register.state = self.SavedTensor.SparseApply(self.Register.state)
+        self.Register.state = self.GroverMatrix.SparseApply(self.Register.state)
+        self.Register.state = self.SavedTensor.SparseApply(self.Register.state)
+
+
+    
+    elif self.MatrixType == &#34;Lazy&#34;:
+
+        # self.GroverDiffusionOperator = self.GroverDiffusionOperator.multiply(self.GroverDiffusionOperator)
+        self.Register.state = self.GroverDiffusionOperator.Apply(self.Register.state)</code></pre>
+</details>
+</dd>
+<dt id="QCP_group3.GroverFromCircuit.GroverCircuit.run"><code class="name flex">
+<span>def <span class="ident">run</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to run the complete Grover's algorithm with arguments specified in class instance. </p>
+<h2 id="input">Input</h2>
+<p>Nothing, all parameters are class variables. </p>
+<h2 id="returns">Returns</h2>
+<p>finalState [np.array]
+-
+array specifying the final state of the qubit register <em>before</em> measurement.
+result [int]
+-
+the index / state found by the algorithm.
+measuredState [np.array]-
+array specifying the state after measurement, i.e. when it has collapsed to measured state.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run(self):
+    &#39;&#39;&#39;
+    Function to run the complete Grover&#39;s algorithm with arguments specified in class instance. 
+
+    Input
+    ------
+    Nothing, all parameters are class variables. 
+
+    Returns
+    -------
+    finalState [np.array]   -   array specifying the final state of the qubit register *before* measurement.
+    result [int]            -   the index / state found by the algorithm.
+    measuredState [np.array]-   array specifying the state after measurement, i.e. when it has collapsed to measured state.
+    &#39;&#39;&#39;
+    numIterations = int(np.pi / 4 * np.sqrt(self.Dimension)) 
+    for i in range(numIterations):
+        self.groverIteration()
+    # self.Register.state = self.GroverDiffusionOperator.Apply(self.Register.state)
+
+    finalState = self.Register.state
+    # finalState = self.GroverDiffusionOperator.Apply(self.Register.state)
+    result = self.Register.measure()
+    measuredState = self.Register.state
+
+    return finalState, result, measuredState</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="QCP_group3" href="index.html">QCP_group3</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="QCP_group3.GroverFromCircuit.GroverCircuit" href="#QCP_group3.GroverFromCircuit.GroverCircuit">GroverCircuit</a></code></h4>
+<ul class="">
+<li><code><a title="QCP_group3.GroverFromCircuit.GroverCircuit.groverIteration" href="#QCP_group3.GroverFromCircuit.GroverCircuit.groverIteration">groverIteration</a></code></li>
+<li><code><a title="QCP_group3.GroverFromCircuit.GroverCircuit.run" href="#QCP_group3.GroverFromCircuit.GroverCircuit.run">run</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
