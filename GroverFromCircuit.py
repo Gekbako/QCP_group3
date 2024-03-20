@@ -3,7 +3,18 @@ import time
 
 class GroverCircuit(Circuit):
     '''
-    Attempt to understand better and optimise through reworking.
+    Class to implement Grover's alogrithm on a qubit register of given size. Inherits from Circuit class.
+    Works through application of the composite Grover diffusion operator, explained further in report, a total of 
+    ceiling(np.pi / 4 * np.sqrt(self.Dimension)) times to a qubit register initialised in a state of equal superposition.
+    
+    Class variables: 
+        matrixType [str]             -   the type of matrix implementation ("dense", "sparse", or "lazy").
+        numberOfQubits [int]         -   the number of qubits in qubit register.
+        targetState [int]            -   the goal state to be found by Grover's algorithm.
+        GroverMatrix [matrixType]    -   matrix of matrixType type, on form diag(1, -1, -1, ...).
+        Oracle [matrixType]          -   matrix of matrixType type, on form diag(-1, -1, ..., 1, ...) where the positive entry
+                                         is aligned with targetState.
+        savedTensor [matrixType]     -   matrix of H^{tensor_n}, corresponding to application of Hadamard gates to every qubit. 
     '''
     def __init__(self, matrixType, numberOfQubits, targetState):
         super().__init__(matrixType, numberOfQubits)
@@ -105,32 +116,48 @@ class GroverCircuit(Circuit):
         
         elif self.MatrixType == "Lazy":
 
+            # self.GroverDiffusionOperator = self.GroverDiffusionOperator.multiply(self.GroverDiffusionOperator)
             self.Register.state = self.GroverDiffusionOperator.Apply(self.Register.state)
 
             
     def run(self):
+        '''
+        Function to run the complete Grover's algorithm with arguments specified in class instance. 
 
-        numIterations = int(np.pi / 4 * np.sqrt(self.Dimension))
+        Input
+        ------
+        Nothing, all parameters are class variables. 
+
+        Returns
+        -------
+        finalState [np.array]   -   array specifying the final state of the qubit register *before* measurement.
+        result [int]            -   the index / state found by the algorithm.
+        measuredState [np.array]-   array specifying the state after measurement, i.e. when it has collapsed to measured state.
+        '''
+        numIterations = int(np.pi / 4 * np.sqrt(self.Dimension)) 
         for i in range(numIterations):
             self.groverIteration()
+        # self.Register.state = self.GroverDiffusionOperator.Apply(self.Register.state)
 
         finalState = self.Register.state
+        # finalState = self.GroverDiffusionOperator.Apply(self.Register.state)
         result = self.Register.measure()
         measuredState = self.Register.state
 
         return finalState, result, measuredState
 
+if __name__ == "__main__":
 
-startTime = time.time()
+    startTime = time.time()
 
-#Demonstration of the circuit
-circuit = GroverCircuit("Lazy", 11, 98)
-state, result, measuredState = circuit.run()
+    #Demonstration of the circuit
+    circuit = GroverCircuit("Lazy", 16, 32145)
+    state, result, measuredState = circuit.run()
 
-# print(state)
-# print(measuredState)
-print(result)
+    # print(state)
+    # print(measuredState)
+    print(result)
 
-endTime = time.time()
-timeElapsed = endTime - startTime
-print(f"Time elapsed: {timeElapsed}s")
+    endTime = time.time()
+    timeElapsed = endTime - startTime
+    print(f"Time elapsed: {timeElapsed}s")
