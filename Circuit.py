@@ -9,16 +9,17 @@ class Circuit(object):
     '''
     Class representing an entire quantum circuit.
 
-    Must contain: 
-        - The full circuit, consisting of: 
-            * Gates, tensored together to account for which qubits are being operated on
-                and then multiplied together (eiter with matmul or Lazy mult.)  
-            * Quantum register being operated on 
-            * Measurement options at the end?
-        - A function to add gates to certain qubits 
-            * This must be optimalised in some way and not just applying one and one gate with
-                a ton of identity matrices tensored to them. 
-        - Visualisation?
+    Class variables: 
+    Register [Q_Register]   -   a qubit register initialised to |0>, keeping track of the quantum state of the qubits in 
+                                the circuit. 
+    Dimension [int]         -   dimensionality of the qubit register. 2^{number of qubits}.
+    NumberOfQubits [int]    -   the number of qubits in the circuit.
+    GateArray [2D list]     -   a list to keep track of which gates have been applied to which qubits in the register.
+    MatrixType [str]        -   a string denoting the type of matrix implementation to be used by the circuit.
+    TensorArray [np.array]  -   an array to construct composite gates with different gates applied to different qubits 
+                                in the register. The heart of the class' functionality. 
+    SavedTensor [np.array]  -   array containing the latest composite gate constructed by the AddLayer() function. Helpful
+                                when extending class to more specific cases, specifically GroverCircuit. 
     ''' 
 
     def __init__(self, matrixType, numberOfQubits):
@@ -30,8 +31,6 @@ class Circuit(object):
         ------
         numberOfQubits [int] - the number of qubits to tensor together to form the register 
         matrixType [string] - the type of matrix implemented in gates. "dense", "sparse" or "lazy" 
-            --> Should matrixType be global for the class or specific to the gates? I.e. should we be able to mix types? 
-
         '''
         self.Register = Q_Register(numberOfQubits)
         self.Dimension = 2**numberOfQubits 
@@ -61,6 +60,15 @@ class Circuit(object):
         Function to add Gate to Circuit without use of apply method from Q_Register. CNOT and CV are applied 
         directly to the register by use of the apply_gate from Q_Register. 
         Also keeps track of which gates have been added to circuit for visualisation. 
+
+        Input
+        ------
+        gate [str]     -   the name of the gate to be applied.
+        qubit [int]    -   the number of the qubit to apply gate to. 
+
+        Returns
+        -------
+        Nothing, adds gates of given type to the specific indices in the TensorArray. 
         '''
 
         addedGate = Gate(self.MatrixType, gate)
@@ -129,10 +137,8 @@ class Circuit(object):
 
     def visualiseCircuit(self):
         '''
-        Function to make graphic visualisation of what's going on. Most useful to make sense of what is applied where 
-        in the circuit chain. 
-        No idea how to implement.
-        Function should be run each time a gate is added to show the updated circuit? 
+        Function to make graphic visualisation of what's going on. Very simple implementation, mostly useful to 
+        make sense of what is applied where in the circuit chain. 
         '''
         
         for i in range(len(self.GateArray)):
@@ -144,7 +150,8 @@ class Circuit(object):
 
     def runCircuit(self):
         '''
-        Function to run the circuit. Returns either endstate or result of measurement? Or both? 
+        Function to run the circuit. 
+        Returns measurement of the quantum register after having had all gates applied. 
         '''
         assert self.TensorArray.any() == 0, "There are still gates that haven't been applied. \nUse AddLayer() to apply them, then proceed."
 
